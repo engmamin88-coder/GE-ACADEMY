@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>GE CT Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f1e;--bg2:#0f1729;--bg3:#141e35;
+  --card:#1a2540;--card2:#1f2d4a;
+  --border:#2a3a5c;--border2:#334466;
+  --blue:#4f8ef7;--blue-s:rgba(79,142,247,0.12);
+  --cyan:#22d3ee;--cyan-s:rgba(34,211,238,0.12);
+  --green:#10b981;--green-s:rgba(16,185,129,0.12);
+  --amber:#f59e0b;--amber-s:rgba(245,158,11,0.12);
+  --red:#ef4444;--red-s:rgba(239,68,68,0.12);
+  --purple:#a78bfa;--purple-s:rgba(167,139,250,0.12);
+  --pink:#f472b6;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --r:14px;--rs:8px;
+  --sh:0 4px 24px rgba(0,0,0,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;}
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,142,247,0.06),transparent 60%),radial-gradient(ellipse 40% 60% at 80% 80%,rgba(34,211,238,0.05),transparent 60%);}
+#app{position:relative;z-index:1;display:flex;min-height:100vh;}
+/* SIDEBAR */
+#sidebar{width:260px;flex-shrink:0;background:rgba(15,23,41,0.97);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:9999 !important;display:flex;flex-direction:column;transition:transform 0.3s cubic-bezier(.4,0,.2,1);}
+#sidebar::-webkit-scrollbar{width:3px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border);}
+.sb-head{padding:1.4rem 1.2rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.app-logo{font-size:1.1rem;font-weight:900;letter-spacing:1px;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.app-logo-sub{font-size:0.62rem;color:var(--text3);letter-spacing:1px;margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.xp-section{margin-top:1rem;}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.xp-level{font-size:0.7rem;font-weight:700;color:var(--blue);}
+.xp-val{font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.xp-bar-bg{background:var(--card);border-radius:99px;height:5px;}
+.xp-bar-fill{height:5px;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .6s ease;box-shadow:0 0 8px var(--cyan);}
+.nav-group{padding:0.6rem 0;}
+.nav-gl{font-size:0.58rem;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:0.4rem 1.2rem 0.2rem;font-family:'JetBrains Mono',monospace;}
+.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.55rem 1.2rem;cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;font-size:0.82rem;font-weight:600;color:var(--text2);touch-action:manipulation;-webkit-tap-highlight-color:rgba(79,142,247,0.2);user-select:none;}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.nav-item.active{color:var(--blue);border-left-color:var(--blue);background:var(--blue-s);}
+.nav-icon{font-size:0.95rem;width:18px;flex-shrink:0;text-align:center;}
+.nb{margin-left:auto;font-size:0.55rem;font-weight:700;padding:2px 7px;border-radius:99px;font-family:'JetBrains Mono',monospace;}
+.nb-new{background:rgba(34,211,238,0.15);color:var(--cyan);border:1px solid rgba(34,211,238,0.3);}
+.sb-foot{margin-top:auto;padding:1rem 1.2rem;border-top:1px solid var(--border);flex-shrink:0;}
+.lv-card{background:var(--card);border-radius:var(--rs);padding:0.75rem;border:1px solid var(--border);}
+.lv-name{font-size:0.8rem;font-weight:800;color:var(--blue);}
+.lv-sub{font-size:0.62rem;color:var(--text3);margin-top:2px;}
+/* TOPBAR MOBILE */
+#topbar{display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,15,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;padding:0 1rem;align-items:center;gap:0.75rem;}
+.menu-btn{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:6px 10px;cursor:pointer;font-size:1rem;color:var(--text2);transition:all 0.15s;}
+.tb-title{font-size:0.85rem;font-weight:700;color:var(--text);flex:1;}
+.tb-xp{font-size:0.62rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--amber);background:var(--amber-s);border:1px solid rgba(245,158,11,0.3);padding:3px 8px;border-radius:99px;}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:250;backdrop-filter:blur(2px);}
+/* MAIN */
+#main{margin-left:260px;flex:1;min-height:100vh;}
+.page{display:none;padding:2rem 2.5rem 5rem;max-width:860px;}
+.page.active{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* TYPOGRAPHY */
+.pg-title{font-size:2rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:0.5rem;letter-spacing:-0.5px;}
+.pg-sub{font-size:0.9rem;color:var(--text2);line-height:1.8;margin-bottom:2rem;border-left:3px solid var(--blue);padding-left:1rem;max-width:680px;}
+h2{font-size:1.2rem;font-weight:800;color:var(--cyan);margin:2.5rem 0 1rem;letter-spacing:-0.3px;}
+h3{font-size:1rem;font-weight:700;color:#fff;margin:1.2rem 0 0.5rem;}
+p{font-size:0.88rem;color:var(--text2);line-height:1.85;margin-bottom:0.75rem;}
+p strong{color:var(--text);font-weight:700;}
+ul,ol{padding-left:1.3rem;color:var(--text2);font-size:0.87rem;line-height:1.85;}
+li{margin-bottom:0.25rem;}
+li strong{color:var(--text);}
+.chips{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.chip{font-size:0.63rem;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:0.5px;border:1px solid;}
+.ch-g{color:var(--green);border-color:rgba(16,185,129,0.4);background:var(--green-s);}
+.ch-b{color:var(--blue);border-color:rgba(79,142,247,0.4);background:var(--blue-s);}
+.ch-r{color:var(--red);border-color:rgba(239,68,68,0.4);background:var(--red-s);}
+.ch-a{color:var(--amber);border-color:rgba(245,158,11,0.4);background:var(--amber-s);}
+.ch-p{color:var(--purple);border-color:rgba(167,139,250,0.4);background:var(--purple-s);}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem;margin:1rem 0;}
+.citem{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;cursor:pointer;transition:all 0.2s;}
+.citem:hover{border-color:var(--blue);background:var(--card2);transform:translateY(-2px);box-shadow:var(--sh);}
+.citem-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:0.75rem;}
+.citem h4{font-size:0.88rem;font-weight:800;color:#fff;margin-bottom:0.3rem;}
+.citem p{font-size:0.74rem;color:var(--text2);margin:0;line-height:1.6;}
+.citem .status{display:inline-block;margin-top:0.6rem;font-size:0.58rem;font-weight:700;padding:2px 8px;border-radius:99px;font-family:'JetBrains Mono',monospace;}
+.st-r{background:var(--blue-s);color:var(--blue);border:1px solid rgba(79,142,247,0.3);}
+/* BOXES */
+.box{border-radius:var(--rs);padding:1rem 1.2rem;margin:1rem 0;font-size:0.85rem;line-height:1.8;}
+.bl{font-size:0.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:0.4rem;}
+.box-b{background:var(--blue-s);border:1px solid rgba(79,142,247,0.2);border-left:3px solid var(--blue);}
+.box-b .bl{color:var(--blue);}
+.box-g{background:var(--green-s);border:1px solid rgba(16,185,129,0.2);border-left:3px solid var(--green);}
+.box-g .bl{color:var(--green);}
+.box-a{background:var(--amber-s);border:1px solid rgba(245,158,11,0.2);border-left:3px solid var(--amber);}
+.box-a .bl{color:var(--amber);}
+.box-r{background:var(--red-s);border:1px solid rgba(239,68,68,0.2);border-left:3px solid var(--red);}
+.box-r .bl{color:var(--red);}
+.box-p{background:var(--purple-s);border:1px solid rgba(167,139,250,0.2);border-left:3px solid var(--purple);}
+.box-p .bl{color:var(--purple);}
+.box p{margin:0;color:var(--text2);}
+.box ul{color:var(--text2);}
+.box strong{color:var(--text);}
+/* GANTRY */
+.gantry-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;display:flex;flex-direction:column;align-items:center;margin:1.5rem 0;}
+.g-label{font-size:0.62rem;font-weight:700;letter-spacing:2px;color:var(--cyan);font-family:'JetBrains Mono',monospace;margin-bottom:1rem;text-transform:uppercase;}
+@keyframes spincw{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes spinccw{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+.rcw{animation:spincw 4s linear infinite;transform-origin:150px 150px;}
+.rccw{animation:spinccw 6s linear infinite;transform-origin:150px 150px;}
+@keyframes pbeam{0%,100%{opacity:0.15;}50%{opacity:0.55;}}
+.beam{animation:pbeam 1.5s ease-in-out infinite;}
+@keyframes pbore{0%,100%{opacity:0.4;}50%{opacity:0.9;}}
+.bore{animation:pbore 2s ease-in-out infinite;}
+/* HU */
+.hu-demo{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin:1.5rem 0;}
+.hu-lbl{font-size:0.62rem;font-weight:700;letter-spacing:2px;color:var(--cyan);font-family:'JetBrains Mono',monospace;margin-bottom:1rem;text-transform:uppercase;}
+.hu-num{font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer;margin:0.5rem 0;}
+.hu-bar-bg{background:rgba(255,255,255,0.05);border-radius:99px;height:20px;overflow:hidden;margin:0.5rem 0;}
+.hu-bar-fill{height:100%;border-radius:99px;transition:all 0.3s;display:flex;align-items:center;padding:0 10px;min-width:28px;}
+.hu-ticks{display:flex;justify-content:space-between;font-size:0.58rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.tch{font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:99px;cursor:pointer;border:1px solid;transition:all 0.15s;}
+/* STEPS */
+.steps{margin:1.5rem 0;display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:1rem;padding:1rem 0;}
+.step-line{display:flex;flex-direction:column;align-items:center;}
+.step-num{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:0.75rem;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(79,142,247,0.4);}
+.step-con{flex:1;width:2px;background:var(--border);margin:4px auto;}
+.step:last-child .step-con{display:none;}
+.step-body{flex:1;padding-bottom:0.5rem;}
+.step-body h4{font-size:0.9rem;font-weight:800;color:#fff;margin-bottom:0.3rem;}
+.step-body p{font-size:0.83rem;color:var(--text2);margin:0;line-height:1.7;}
+/* COMPONENT EXPLORER */
+.comp-tabs{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.2rem;}
+.comp-tab{padding:0.45rem 0.9rem;border-radius:var(--rs);cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:0.77rem;font-weight:700;transition:all 0.15s;}
+.comp-tab:hover{border-color:var(--border2);color:var(--text);}
+.comp-tab.active{background:var(--blue-s);border-color:rgba(79,142,247,0.5);color:var(--blue);}
+.lv-tabs{display:flex;gap:0.5rem;margin-bottom:1.2rem;}
+.lv-tab{flex:1;padding:0.5rem;border-radius:var(--rs);cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:0.72rem;font-weight:700;transition:all 0.15s;text-align:center;}
+.lv-g{background:var(--green-s);border-color:rgba(16,185,129,0.4);color:var(--green);}
+.lv-a{background:var(--amber-s);border-color:rgba(245,158,11,0.4);color:var(--amber);}
+.lv-r{background:var(--red-s);border-color:rgba(239,68,68,0.4);color:var(--red);}
+.cp{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;animation:fadeUp 0.2s ease;}
+.fc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:0.75rem;}
+.fn{font-size:0.85rem;font-weight:800;color:var(--amber);margin-bottom:0.6rem;}
+.fg{display:grid;grid-template-columns:70px 1fr;gap:4px;font-size:0.78rem;}
+.fk{color:var(--text3);font-weight:600;}
+.fv{color:var(--text2);}
+.fa{color:var(--cyan)!important;font-weight:600;}
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:0.8rem;margin:1rem 0;}
+.tbl th{background:var(--bg3);color:var(--cyan);font-weight:800;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:left;letter-spacing:0.3px;}
+.tbl td{padding:0.5rem 0.75rem;border:1px solid var(--border2);color:var(--text2);}
+.tbl tr:hover td{background:rgba(255,255,255,0.015);color:var(--text);}
+.tbl td:first-child{color:var(--text);font-weight:700;}
+.best{color:var(--cyan)!important;font-weight:800!important;}
+.good{color:var(--green)!important;}
+.na{color:var(--text3)!important;}
+/* QUIZ */
+.qwrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin:1.5rem 0;}
+.q-hdr{display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;}
+.q-hl{font-size:0.62rem;font-weight:700;letter-spacing:2px;color:var(--cyan);font-family:'JetBrains Mono',monospace;text-transform:uppercase;}
+.q-prog{display:flex;gap:4px;margin-bottom:1.2rem;}
+.q-seg{flex:1;height:4px;border-radius:99px;background:var(--border);transition:background 0.3s;}
+.q-seg.done{background:var(--green);}
+.q-seg.cur{background:var(--blue);}
+.q-q{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:1.2rem;line-height:1.6;}
+.q-opts{display:flex;flex-direction:column;gap:0.5rem;}
+.q-opt{padding:0.7rem 1rem;border-radius:var(--rs);cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:0.85rem;font-weight:600;transition:all 0.15s;text-align:left;font-family:'Nunito',sans-serif;}
+.q-opt:hover:not([disabled]){border-color:var(--border2);color:var(--text);background:var(--card2);}
+.q-opt.correct{border-color:var(--green);color:var(--green);background:var(--green-s);}
+.q-opt.wrong{border-color:var(--red);color:var(--red);background:var(--red-s);}
+.q-opt.faded{opacity:0.4;}
+.q-fb{margin-top:1rem;padding:0.9rem 1rem;border-radius:var(--rs);font-size:0.83rem;line-height:1.7;animation:fadeUp 0.3s ease;}
+.q-fb.c{background:var(--green-s);border:1px solid rgba(16,185,129,0.3);color:var(--green);}
+.q-fb.w{background:var(--red-s);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;}
+.q-fb strong{display:block;margin-bottom:0.2rem;}
+.btn{display:inline-flex;align-items:center;gap:0.4rem;margin-top:1rem;padding:0.55rem 1.3rem;background:var(--blue-s);border:1px solid rgba(79,142,247,0.4);color:var(--blue);border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:0.83rem;font-weight:800;cursor:pointer;transition:all 0.15s;}
+.btn:hover{background:rgba(79,142,247,0.2);}
+.btn-g{background:var(--green-s);border-color:rgba(16,185,129,0.4);color:var(--green);}
+.btn-g:hover{background:rgba(16,185,129,0.2);}
+.q-res{text-align:center;padding:1.5rem 0;}
+.q-res .emoji{font-size:2.5rem;margin-bottom:0.75rem;}
+.q-res h3{font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:0.5rem;}
+.q-res .sc{font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--amber),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+/* PM */
+.pm-sec{margin-bottom:1.5rem;}
+.pm-st{font-size:0.85rem;font-weight:800;color:var(--blue);padding:0.6rem 1rem;background:var(--blue-s);border-radius:var(--rs) var(--rs) 0 0;border:1px solid rgba(79,142,247,0.2);}
+.pm-items{border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);overflow:hidden;}
+.pm-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 1rem;border-bottom:1px solid var(--border2);cursor:pointer;transition:background 0.15s;font-size:0.82rem;}
+.pm-item:last-child{border-bottom:none;}
+.pm-item:hover{background:rgba(255,255,255,0.02);}
+.pm-ck{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.18s;font-size:0.7rem;}
+.pm-item.checked .pm-ck{background:var(--green);border-color:var(--green);color:#fff;}
+.pm-item.checked .pm-tx{color:var(--text3);text-decoration:line-through;}
+.pm-tx{color:var(--text2);}
+.pm-pr{margin-left:auto;font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:99px;font-family:'JetBrains Mono',monospace;}
+.pc{background:var(--red-s);color:var(--red);border:1px solid rgba(239,68,68,0.3);}
+.ph{background:var(--amber-s);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.pm{background:var(--green-s);color:var(--green);border:1px solid rgba(16,185,129,0.3);}
+.pm-sum{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.pm-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:0.75rem 1rem;flex:1;min-width:90px;}
+.pm-sv{font-size:1.4rem;font-weight:900;color:#fff;}
+.pm-sl{font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+/* ARTIFACTS */
+.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;margin:1rem 0;}
+.art-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;cursor:pointer;transition:all 0.2s;}
+.art-card:hover{border-color:var(--border2);background:var(--card2);}
+.art-card.open{border-color:var(--blue);background:var(--blue-s);}
+.art-svg{margin:0.5rem 0 0.75rem;height:75px;display:flex;align-items:center;justify-content:center;}
+.art-name{font-size:0.85rem;font-weight:800;color:#fff;margin-bottom:0.25rem;}
+.art-cause{font-size:0.72rem;color:var(--text2);}
+.art-det{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-top:0.75rem;animation:fadeUp 0.2s ease;display:none;}
+.art-det.show{display:block;}
+/* FLOW */
+.flow-steps{display:flex;gap:0.4rem;overflow-x:auto;padding-bottom:0.5rem;margin:1.5rem 0;}
+.flow-step{flex-shrink:0;min-width:130px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;}
+.f-arr{display:flex;align-items:center;color:var(--border2);font-size:1.1rem;flex-shrink:0;align-self:center;}
+.f-num{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:0.78rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem;box-shadow:0 0 10px rgba(79,142,247,0.3);}
+.flow-step h4{font-size:0.76rem;font-weight:800;color:#fff;margin-bottom:0.25rem;}
+.flow-step p{font-size:0.67rem;color:var(--text2);margin:0;line-height:1.5;}
+/* MODEL CARDS */
+.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1.25rem;}
+.mc-h{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;}
+.mc-badge{width:46px;height:46px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.mc-info h3{font-size:1rem;font-weight:900;color:#fff;margin:0 0 2px;}
+.mc-info .mc-cls{font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+.mc-specs{display:flex;flex-wrap:wrap;gap:1rem;padding:0.9rem 1.5rem;background:rgba(0,0,0,0.2);border-bottom:1px solid var(--border);}
+.mc-sp{text-align:center;}
+.mc-sv{font-size:1.1rem;font-weight:900;color:var(--cyan);}
+.mc-sl{font-size:0.58rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.mc-body{padding:1.2rem 1.5rem;}
+/* COMPLETE */
+.done-banner{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(34,211,238,0.1));border:1px solid rgba(16,185,129,0.3);border-radius:var(--r);padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-top:3rem;}
+.done-banner .di{font-size:2rem;}
+.done-banner h4{font-size:0.95rem;font-weight:800;color:var(--green);margin-bottom:2px;}
+.done-banner p{font-size:0.78rem;color:var(--text2);margin:0;}
+.done-xp{margin-left:auto;font-size:1.2rem;font-weight:900;color:var(--amber);}
+/* DASHBOARD */
+.dash-hero{background:linear-gradient(135deg,rgba(79,142,247,0.1),rgba(34,211,238,0.08));border:1px solid rgba(79,142,247,0.2);border-radius:var(--r);padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden;}
+.dash-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(rgba(34,211,238,0.1),transparent 70%);}
+.dash-hero h1{font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:0.5rem;}
+.dash-hero p{font-size:0.88rem;color:var(--text2);margin:0;max-width:480px;}
+.d-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-top:1.5rem;}
+.d-stat{background:rgba(0,0,0,0.3);border-radius:var(--rs);padding:0.75rem;text-align:center;}
+.d-sv{font-size:1.4rem;font-weight:900;color:var(--cyan);}
+.d-sl{font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.ch-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;}
+.ch-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.ch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity 0.2s;}
+.ch-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--sh);}
+.ch-card:hover::before{opacity:1;}
+.cc-bl::before{background:linear-gradient(90deg,var(--blue),var(--cyan));}
+.cc-gn::before{background:linear-gradient(90deg,var(--green),var(--cyan));}
+.cc-am::before{background:linear-gradient(90deg,var(--amber),var(--pink));}
+.cc-pu::before{background:linear-gradient(90deg,var(--purple),var(--pink));}
+.cc-rd::before{background:linear-gradient(90deg,var(--red),var(--amber));}
+.cc-cy::before{background:linear-gradient(90deg,var(--cyan),var(--blue));}
+.ch-card .ci{font-size:1.8rem;margin-bottom:0.75rem;}
+.ch-card h4{font-size:0.9rem;font-weight:800;color:#fff;margin-bottom:0.3rem;}
+.ch-card p{font-size:0.75rem;color:var(--text2);margin:0;line-height:1.6;}
+.st-rdy{background:var(--blue-s);color:var(--blue);border:1px solid rgba(79,142,247,0.3);}
+.formula{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:1rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--cyan);margin:1rem 0;text-align:center;letter-spacing:1px;}
+hr{border:none;border-top:1px solid var(--border);margin:2rem 0;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+/* FAULT */
+.fault-cat{margin-bottom:1.5rem;}
+.fault-cat-title{font-size:0.73rem;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);pointer-events:all !important;}
+  #topbar{display:flex;}
+  #main{margin-left:0;}
+  .page{padding:5rem 1.2rem 4rem;}
+  .pg-title{font-size:1.5rem;}
+  .d-stats{grid-template-columns:repeat(3,1fr);}
+  .mc-h{flex-direction:column;text-align:center;}
+  .flow-steps{gap:0.25rem;}
+  .flow-step{min-width:115px;}
+  .ch-cards{grid-template-columns:1fr 1fr;}
+  .tbl{font-size:0.72rem;}
+  .tbl th,.tbl td{padding:0.38rem 0.45rem;}
+}
+@media(max-width:480px){
+  .ch-cards,.card-grid{grid-template-columns:1fr;}
+  .art-grid{grid-template-columns:1fr 1fr;}
+}
+#sidebar{z-index:9999 !important;}
+
+
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div id="topbar">
+  <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="tb-title" id="tb-title">Dashboard</div>
+  <div class="tb-xp" id="tb-xp">⚡ 0 XP</div>
+</div>
+
+    <div class="login-sub">// FSE Learning Platform</div>
+    
+</div>
+<div id="app">
+<nav id="sidebar">
+  <div class="sb-head">
+    <div class="app-logo">GE CT ACADEMY</div>
+    <div class="app-logo-sub">// FSE Learning Platform</div>
+    <div class="xp-section">
+      <div class="xp-row"><div class="xp-level" id="lv-name">Level 1 — Trainee</div><div class="xp-val" id="xp-lbl">0 XP</div></div>
+      <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="nav-group"><div class="nav-gl">Main</div>
+    <div class="nav-item active" data-page="home" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">🏠</span>Dashboard</div>
+  </div>
+  <div class="nav-group"><div class="nav-gl">Foundations</div>
+    <div class="nav-item" data-page="physics" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">⚛️</span>CT Physics<span class="nb nb-new">NEW</span></div>
+    <div class="nav-item" data-page="gantry" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">⚙️</span>Gantry Components<span class="nb nb-new">NEW</span></div>
+    <div class="nav-item" data-page="models" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">🖥️</span>CT Models<span class="nb nb-new">NEW</span></div>
+  </div>
+  <div class="nav-group"><div class="nav-gl">Clinical & Technical</div>
+    <div class="nav-item" data-page="artifacts" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">🌀</span>Image Artifacts<span class="nb nb-new">NEW</span></div>
+    <div class="nav-item" data-page="trouble" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">🔧</span>Troubleshooting<span class="nb nb-new">NEW</span></div>
+  </div>
+  <div class="nav-group"><div class="nav-gl">Service Ops</div>
+    <div class="nav-item" data-page="pm" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">📋</span>PM Checklists<span class="nb nb-new">NEW</span></div>
+    <div class="nav-item" data-page="ordering" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">📦</span>Parts & Ordering<span class="nb nb-new">NEW</span></div>
+    <div class="nav-item" data-page="quiz" onclick="event.stopPropagation();goPage(this);"><span class="nav-icon">🎯</span>Master Quiz<span class="nb nb-new">NEW</span></div>
+  </div>
+  <div class="sb-foot">
+    <div class="lv-card"><div class="lv-name" id="sb-lv">Trainee</div><div class="lv-sub" id="sb-nx">200 XP to next level</div></div>
+  </div>
+</nav>
+<main id="main" onclick="if(document.getElementById('sidebar').classList.contains('open')){closeSidebar();}">
+<!-- HOME -->
+<div class="page active" id="page-home">
+<div class="dash-hero">
+  <h1>Welcome to GE CT Academy 👋</h1>
+  <p>Your complete field service reference — from zero to expert. Learn, practice, and ace every service call.</p>
+  <div class="d-stats">
+    <div class="d-stat"><div class="d-sv">8</div><div class="d-sl">Chapters</div></div>
+    <div class="d-stat"><div class="d-sv" id="d-qc">0</div><div class="d-sl">Quizzes Done</div></div>
+    <div class="d-stat"><div class="d-sv" id="d-xp">0</div><div class="d-sl">XP Earned</div></div>
+  </div>
+</div>
+<h2>📚 All Chapters</h2>
+<div class="ch-cards">
+  <div class="ch-card cc-bl" onclick="goPageById('physics')"><div class="ci">⚛️</div><h4>CT Physics & X-Rays</h4><p>How X-rays are made, Hounsfield Units, attenuation, full scan sequence.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-cy" onclick="goPageById('gantry')"><div class="ci">⚙️</div><h4>Gantry Components</h4><p>Tube, Detector, HVG, Slip Ring, DAS — 3 levels from beginner to FSE expert.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-pu" onclick="goPageById('models')"><div class="ci">🖥️</div><h4>CT Model Reference</h4><p>Revolution, Optima, BrightSpeed — full specs and comparison matrix.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-am" onclick="goPageById('artifacts')"><div class="ci">🌀</div><h4>Image Artifacts</h4><p>Ring, streak, beam hardening, motion — root cause and FSE action for each.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-rd" onclick="goPageById('trouble')"><div class="ci">🔧</div><h4>Troubleshooting</h4><p>Error codes, diagnostic workflow, fault categories and action plans.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-gn" onclick="goPageById('pm')"><div class="ci">📋</div><h4>PM Checklists</h4><p>Interactive quarterly and annual PM checklists you can tick off on-site.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-bl" onclick="goPageById('ordering')"><div class="ci">📦</div><h4>Parts & Ordering</h4><p>Full ordering workflow, priority classification, DOA process, portal guide.</p><span class="status st-rdy">READY</span></div>
+  <div class="ch-card cc-am" onclick="goPageById('quiz')"><div class="ci">🎯</div><h4>Master Quiz</h4><p>20 questions across all topics. Test your full FSE knowledge and earn XP.</p><span class="status st-rdy">READY</span></div>
+</div>
+</div>
+
+<!-- PHYSICS -->
+<div class="page" id="page-physics">
+<div class="chips"><span class="chip ch-g">Beginner Friendly</span><span class="chip ch-b">Technical Depth</span><span class="chip ch-r">FSE Level</span></div>
+<div class="pg-title">⚛️ CT Physics & X-Ray Fundamentals</div>
+<div class="pg-sub">Build your foundation — from how X-rays are born to how a full CT image is created. Use the interactive demos to understand key concepts.</div>
+<div class="gantry-wrap">
+  <div class="g-label">// Live Gantry Cross-Section</div>
+  <svg width="280" height="280" viewBox="0 0 300 300">
+    <defs><radialGradient id="bg"><stop offset="0%" stop-color="#0f1729"/><stop offset="100%" stop-color="#0a0f1e"/></radialGradient></defs>
+    <circle cx="150" cy="150" r="140" fill="#0f1729" stroke="#1a2540" stroke-width="2"/>
+    <g class="rcw">
+      <circle cx="150" cy="150" r="118" fill="none" stroke="#1a3050" stroke-width="22"/>
+      <circle cx="150" cy="150" r="118" fill="none" stroke="#2a4060" stroke-width="1" stroke-dasharray="6 3" opacity="0.5"/>
+      <rect x="136" y="18" width="28" height="16" rx="4" fill="#f59e0b"/>
+      <text x="150" y="28" text-anchor="middle" fill="#000" font-size="6.5" font-family="JetBrains Mono" font-weight="700">TUBE</text>
+      <rect x="136" y="266" width="28" height="16" rx="4" fill="#10b981"/>
+      <text x="150" y="276" text-anchor="middle" fill="#000" font-size="6" font-family="JetBrains Mono" font-weight="700">DET</text>
+      <rect x="258" y="143" width="24" height="14" rx="3" fill="#4f8ef7"/>
+      <text x="270" y="152" text-anchor="middle" fill="#fff" font-size="5.5" font-family="JetBrains Mono" font-weight="700">HVG</text>
+      <rect x="18" y="143" width="24" height="14" rx="3" fill="#a78bfa"/>
+      <text x="30" y="152" text-anchor="middle" fill="#fff" font-size="5.5" font-family="JetBrains Mono" font-weight="700">SR</text>
+    </g>
+    <g class="beam">
+      <line x1="150" y1="34" x2="150" y2="266" stroke="#f59e0b" stroke-width="1" stroke-dasharray="5 4" opacity="0.6"/>
+      <line x1="150" y1="34" x2="130" y2="266" stroke="#f59e0b" stroke-width="0.6" stroke-dasharray="4 5" opacity="0.35"/>
+      <line x1="150" y1="34" x2="170" y2="266" stroke="#f59e0b" stroke-width="0.6" stroke-dasharray="4 5" opacity="0.35"/>
+    </g>
+    <g class="rccw">
+      <circle cx="150" cy="150" r="82" fill="none" stroke="#1a2a40" stroke-width="14"/>
+      <text x="150" y="72" text-anchor="middle" fill="#22d3ee" font-size="6" font-family="JetBrains Mono" opacity="0.7">DAS</text>
+      <text x="228" y="153" text-anchor="middle" fill="#22d3ee" font-size="6" font-family="JetBrains Mono" opacity="0.7">DAS</text>
+      <text x="150" y="234" text-anchor="middle" fill="#22d3ee" font-size="6" font-family="JetBrains Mono" opacity="0.7">DAS</text>
+      <text x="72" y="153" text-anchor="middle" fill="#22d3ee" font-size="6" font-family="JetBrains Mono" opacity="0.7">DAS</text>
+    </g>
+    <circle cx="150" cy="150" r="56" fill="url(#bg)" stroke="#22d3ee" stroke-width="1.5"/>
+    <circle cx="150" cy="150" r="56" fill="none" stroke="#22d3ee" stroke-width="0.5" opacity="0.4" class="bore"/>
+    <ellipse cx="150" cy="150" rx="20" ry="30" fill="rgba(79,142,247,0.12)" stroke="rgba(79,142,247,0.4)" stroke-width="1"/>
+    <text x="150" y="154" text-anchor="middle" fill="rgba(79,142,247,0.6)" font-size="6.5" font-family="JetBrains Mono">PATIENT</text>
+  </svg>
+</div>
+<h2>01 — What is CT?</h2>
+<p>CT (Computed Tomography) creates cross-sectional images by measuring how different tissues absorb X-rays from hundreds of angles. A computer reconstructs these measurements into 2D slices — stacked into a 3D volume.</p>
+<div class="box box-b"><div class="bl">💡 Core Principle</div><p><strong>Attenuation</strong> = how much the tissue reduces the X-ray beam. Dense materials (bone, metal) attenuate more. Less dense (air, fat) attenuate less. The CT image is a map of attenuation values across the body slice.</p></div>
+<h2>02 — How X-Rays Are Produced</h2>
+<div class="steps">
+  <div class="step"><div class="step-line"><div class="step-num">1</div><div class="step-con"></div></div><div class="step-body"><h4>Cathode Heating</h4><p>Electric current heats the tungsten filament → electrons released by thermionic emission (like boiling electrons off the metal surface).</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">2</div><div class="step-con"></div></div><div class="step-body"><h4>Electron Acceleration</h4><p>High voltage (80–140 kV) across tube accelerates electrons from cathode to anode. Higher kV = faster electrons = higher energy X-rays = deeper penetration.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">3</div><div class="step-con"></div></div><div class="step-body"><h4>X-Ray Production</h4><p>Electrons strike tungsten anode → <strong>~1% becomes X-rays</strong>, ~99% becomes heat. Two mechanisms: <strong>Bremsstrahlung</strong> (braking radiation) and <strong>Characteristic radiation</strong>. Anode rotates at 3,600–10,000 RPM to spread heat.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">4</div><div class="step-con"></div></div><div class="step-body"><h4>Beam Shaping</h4><p>Collimators (tungsten blades) shape beam into fan/cone matching detector geometry. Pre-patient filters remove low-energy photons that add dose without improving image quality.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">5</div><div class="step-con"></div></div><div class="step-body"><h4>Detection & Reconstruction</h4><p>Beam passes through patient → detector measures transmitted intensity at each element → DAS digitizes → reconstruction computer builds image from thousands of angle measurements.</p></div></div>
+</div>
+<h2>03 — Hounsfield Units (HU)</h2>
+<p>All CT values are expressed in <strong>Hounsfield Units (HU)</strong>. The scale is anchored: Water = 0 HU, Air = −1000 HU.</p>
+<div class="formula">HU = 1000 × (μ_tissue − μ_water) / μ_water</div>
+<p>This ensures CT values are reproducible across all scanners worldwide, regardless of manufacturer or technique used.</p>
+<div class="hu-demo">
+  <div class="hu-lbl">// Hounsfield Unit Explorer — Interactive</div>
+  <div style="display:flex;align-items:flex-end;gap:1rem;margin-bottom:1rem;">
+    <div><div style="font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:2px;">HU VALUE</div><div class="hu-num" id="hu-num">0</div></div>
+    <div style="flex:1"><div style="font-size:0.8rem;font-weight:700;color:var(--text);margin-bottom:4px;" id="hu-tissue">≈ Water</div><div class="hu-bar-bg"><div class="hu-bar-fill" id="hu-bar" style="width:50%;background:#22d3ee;"></div></div></div>
+  </div>
+  <input type="range" id="hu-sl" min="-1000" max="1000" value="0" oninput="updHU(this.value)">
+  <div class="hu-ticks"><span>−1000 Air</span><span>0 Water</span><span>+700 Bone</span></div>
+  <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem;" id="tch-chips"></div>
+</div>
+<div class="box box-a"><div class="bl">⚠ FSE Note</div><p>If a water phantom reads outside <strong>0 ± 5 HU</strong>, this indicates calibration drift, beam hardening issues, or detector uniformity problems. Always run water phantom test as part of your diagnostic workflow.</p></div>
+<h2>04 — Full Scan Sequence</h2>
+<div class="steps">
+  <div class="step"><div class="step-line"><div class="step-num">1</div><div class="step-con"></div></div><div class="step-body"><h4>Protocol Selection</h4><p>Technologist selects kV, mA, rotation speed, pitch, FOV. Console sends parameters to all subsystems simultaneously.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">2</div><div class="step-con"></div></div><div class="step-body"><h4>Gantry Spin-Up</h4><p>Motor accelerates gantry to target speed. "Tube ready" signal confirms anode at speed and filament at operating temperature.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">3</div><div class="step-con"></div></div><div class="step-body"><h4>HV On — Exposure</h4><p>HVG applies kV across tube. Table moves patient at prescribed speed (pitch). Helical data acquisition begins and continues until anatomy is covered.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">4</div><div class="step-con"></div></div><div class="step-body"><h4>Data Acquisition</h4><p>Detectors sample ~7,000 views/rotation. DAS digitizes and transmits via slip ring to reconstruction computer in real time.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">5</div><div class="step-con"></div></div><div class="step-body"><h4>Reconstruction</h4><p>Algorithm (FBP / ASiR / AIR Recon DL / TrueFidelity) converts raw sinogram data to cross-sectional images. Displayed within seconds of scan completion.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">6</div><div class="step-con"></div></div><div class="step-body"><h4>Archive & Log</h4><p>Images sent to PACS via DICOM. Dose report generated. System logs scan event and updates tube usage counters automatically.</p></div></div>
+</div>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Continue to Gantry Components</p></div><div class="done-xp">+150 XP</div></div>
+</div>
+
+<!-- GANTRY -->
+<div class="page" id="page-gantry">
+<div class="chips"><span class="chip ch-g">🟢 Beginner</span><span class="chip ch-a">🟡 Intermediate</span><span class="chip ch-r">🔴 Advanced FSE</span></div>
+<div class="pg-title">⚙️ Gantry Components</div>
+<div class="pg-sub">Click any component then choose your depth level. Simple analogies to FSE failure analysis — all in one place.</div>
+<div class="lv-tabs">
+  <div class="lv-tab lv-g" id="lt0" onclick="setLv(0)">🟢 Beginner</div>
+  <div class="lv-tab" id="lt1" onclick="setLv(1)">🟡 Intermediate</div>
+  <div class="lv-tab" id="lt2" onclick="setLv(2)">🔴 Advanced</div>
+</div>
+<div class="comp-tabs" id="comp-tabs"></div>
+<div class="cp" id="comp-panel"></div>
+<hr>
+<h2>System Data & Power Flow</h2>
+<div class="box box-g"><div class="bl">System Architecture</div><p><strong>Power Path:</strong> Facility AC (480V 3-phase) → PDU → Slip Ring → HV Generator → X-Ray Tube<br><strong>Data Path:</strong> Detector → DAS → Slip Ring (optical) → Reconstruction Computer → Display<br><strong>Control Path:</strong> Operator Console ↔ System Controller ↔ All subsystems (bidirectional, real-time)</p></div>
+<h2>Thermal Management</h2>
+<table class="tbl">
+  <thead><tr><th>Source</th><th>Level</th><th>Cooling</th><th>Monitor Via</th></tr></thead>
+  <tbody>
+    <tr><td>X-Ray Tube</td><td style="color:var(--red);font-weight:700;">VERY HIGH</td><td>Rotating anode + oil circuit + HEX</td><td>Tube Heat Units (MHU)</td></tr>
+    <tr><td>HV Generator</td><td style="color:var(--amber);font-weight:700;">MODERATE</td><td>Gantry fans + air circulation</td><td>HVG temp sensors</td></tr>
+    <tr><td>DAS Boards</td><td style="color:var(--green);font-weight:700;">LOW</td><td>Gantry air circulation</td><td>Board temp in service logs</td></tr>
+    <tr><td>Recon Computer</td><td style="color:var(--amber);font-weight:700;">MODERATE</td><td>Equipment room AC/chiller</td><td>Server temp monitoring</td></tr>
+    <tr><td>Slip Ring Brushes</td><td style="color:var(--green);font-weight:700;">LOW</td><td>Passive + ventilation</td><td>Visual inspection at PM</td></tr>
+  </tbody>
+</table>
+<div class="box box-a"><div class="bl">⚠ Thermal Tip</div><p>Back-to-back cardiac/perfusion protocols stress the cooling chain far more than routine body scans. Always ask about <strong>scan volume and protocol mix</strong> when investigating thermal faults.</p></div>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Continue to CT Model Reference</p></div><div class="done-xp">+200 XP</div></div>
+</div>
+
+<!-- MODELS -->
+<div class="page" id="page-models">
+<div class="pg-title">🖥️ GE CT Model Reference</div>
+<div class="pg-sub">Full specs and clinical capabilities for each GE CT platform. Use for upgrade assessments, troubleshooting context, and customer discussions.</div>
+<div class="mc">
+  <div class="mc-h"><div class="mc-badge" style="background:rgba(79,142,247,0.15);border:1px solid rgba(79,142,247,0.3);">🔵</div><div class="mc-info"><h3>Revolution Series</h3><div class="mc-cls">FLAGSHIP — ADVANCED CLINICAL PLATFORM</div></div><span class="chip ch-b" style="margin-left:auto;">Premium</span></div>
+  <div class="mc-specs"><div class="mc-sp"><div class="mc-sv">0.28s</div><div class="mc-sl">Min Rotation</div></div><div class="mc-sp"><div class="mc-sv">256</div><div class="mc-sl">Max Slices</div></div><div class="mc-sp"><div class="mc-sv">75cm</div><div class="mc-sl">Bore</div></div><div class="mc-sp"><div class="mc-sv">160mm</div><div class="mc-sl">Coverage/Rot</div></div><div class="mc-sp"><div class="mc-sv">500kg</div><div class="mc-sl">Table Cap.</div></div></div>
+  <div class="mc-body">
+    <div class="chips"><span class="chip ch-b">Cardiac</span><span class="chip ch-p">Neuro/Perf</span><span class="chip ch-r">Trauma</span><span class="chip ch-g">AI Recon</span><span class="chip ch-a">Spectral</span></div>
+    <table class="tbl"><thead><tr><th>Model</th><th>Slices</th><th>Rotation</th><th>Key Feature</th></tr></thead><tbody>
+      <tr><td>Revolution Apex</td><td class="best">256</td><td class="best">0.28s</td><td>TrueFidelity AI + Spectral + widest bore</td></tr>
+      <tr><td>Revolution CT</td><td class="best">256</td><td class="best">0.28s</td><td>Whole-organ single rotation, 160mm z-coverage</td></tr>
+      <tr><td>Revolution Frontier</td><td>128</td><td>0.35s</td><td>Dual-energy spectral CT capability</td></tr>
+      <tr><td>Revolution EVO</td><td>64</td><td>0.35s</td><td>AIR Recon DL, efficient mid-high range</td></tr>
+    </tbody></table>
+    <div class="box box-a"><div class="bl">⚠ FSE Note</div><p>Revolution CT uses the <strong>Gemstone Clarity detector</strong> — requires specific calibration procedures. Always verify detector calibration after any gantry work. Rotation speed MUST be validated post-maintenance.</p></div>
+  </div>
+</div>
+<div class="mc">
+  <div class="mc-h"><div class="mc-badge" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);">🟢</div><div class="mc-info"><h3>Optima CT Series</h3><div class="mc-cls">MID-RANGE — CLINICAL WORKHORSE</div></div><span class="chip ch-g" style="margin-left:auto;">Mid-Range</span></div>
+  <div class="mc-specs"><div class="mc-sp"><div class="mc-sv">0.5s</div><div class="mc-sl">Min Rotation</div></div><div class="mc-sp"><div class="mc-sv">64</div><div class="mc-sl">Max Slices</div></div><div class="mc-sp"><div class="mc-sv">70cm</div><div class="mc-sl">Bore</div></div><div class="mc-sp"><div class="mc-sv">40mm</div><div class="mc-sl">Coverage/Rot</div></div><div class="mc-sp"><div class="mc-sv">227kg</div><div class="mc-sl">Table Cap.</div></div></div>
+  <div class="mc-body">
+    <table class="tbl"><thead><tr><th>Model</th><th>Slices</th><th>Key Feature</th></tr></thead><tbody>
+      <tr><td>Optima CT580</td><td>64</td><td>High-end mid-range, cardiac capable, ASiR-V</td></tr>
+      <tr><td>Optima CT540</td><td>40</td><td>Balanced performance, large install base</td></tr>
+      <tr><td>Optima CT520</td><td>16</td><td>Entry-level, ASiR dose reduction</td></tr>
+    </tbody></table>
+  </div>
+</div>
+<div class="mc">
+  <div class="mc-h"><div class="mc-badge" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);">🟡</div><div class="mc-info"><h3>BrightSpeed Series</h3><div class="mc-cls">ENTRY-LEVEL — LARGE INSTALLED BASE</div></div><span class="chip ch-a" style="margin-left:auto;">Legacy Fleet</span></div>
+  <div class="mc-specs"><div class="mc-sp"><div class="mc-sv">0.7s</div><div class="mc-sl">Min Rotation</div></div><div class="mc-sp"><div class="mc-sv">16</div><div class="mc-sl">Max Slices</div></div><div class="mc-sp"><div class="mc-sv">70cm</div><div class="mc-sl">Bore</div></div><div class="mc-sp"><div class="mc-sv">20mm</div><div class="mc-sl">Coverage/Rot</div></div><div class="mc-sp"><div class="mc-sv">204kg</div><div class="mc-sl">Table Cap.</div></div></div>
+  <div class="mc-body"><p>BrightSpeed (Edge, Select, Elite) has one of the largest installed bases globally. Mature platform with predictable failure patterns and excellent parts availability. Most FSEs will encounter this system frequently.</p>
+  <div class="box box-b"><div class="bl">💡 FSE Tip</div><p><strong>Performix tube</strong> has well-documented wear patterns. Track arc counts via Service Platform. <strong>HiLight detector</strong> channels are individually replaceable — always run DCA after channel replacement.</p></div></div>
+</div>
+<h2>Full Platform Comparison</h2>
+<div style="overflow-x:auto;">
+<table class="tbl">
+  <thead><tr><th>Parameter</th><th>BrightSpeed</th><th>Optima CT580</th><th>Rev. EVO</th><th>Revolution CT</th><th>Rev. Apex</th></tr></thead>
+  <tbody>
+    <tr><td>Max Slices</td><td>16</td><td>64</td><td>64</td><td class="best">256</td><td class="best">256</td></tr>
+    <tr><td>Min Rotation</td><td>0.7s</td><td>0.5s</td><td>0.35s</td><td class="best">0.28s</td><td class="best">0.28s</td></tr>
+    <tr><td>Z-Coverage</td><td>20mm</td><td>40mm</td><td>40mm</td><td class="best">160mm</td><td class="best">160mm</td></tr>
+    <tr><td>Bore</td><td>70cm</td><td>70cm</td><td>70cm</td><td class="best">75cm</td><td class="best">75cm</td></tr>
+    <tr><td>Detector</td><td>HiLight</td><td>HiLight</td><td>Gemstone</td><td>Gem. Clarity</td><td>Gem. Clarity</td></tr>
+    <tr><td>AI Recon</td><td class="na">—</td><td class="na">—</td><td class="good">AIR DL</td><td class="na">—</td><td class="best">TrueFidelity</td></tr>
+    <tr><td>Spectral CT</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="best">✓</td></tr>
+    <tr><td>Cardiac</td><td class="na">Limited</td><td class="good">✓</td><td class="good">✓</td><td class="best">✓ Single beat</td><td class="best">✓ Single beat</td></tr>
+    <tr><td>Table Cap.</td><td>204kg</td><td>227kg</td><td>227kg</td><td class="best">500kg</td><td class="best">500kg</td></tr>
+    <tr><td>Dose Reduc.</td><td>ASiR</td><td>ASiR-V</td><td>ASiR-V+DL</td><td>ASiR-V</td><td class="best">TrueFidelity DL</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Continue to Image Artifacts</p></div><div class="done-xp">+150 XP</div></div>
+</div>
+
+<!-- ARTIFACTS -->
+<div class="page" id="page-artifacts">
+<div class="pg-title">🌀 Image Artifacts</div>
+<div class="pg-sub">Learn to identify artifacts, understand root cause, and know exactly which component to investigate. Click any artifact to expand full detail.</div>
+<div class="art-grid" id="art-grid"></div>
+<div class="art-det" id="art-det"></div>
+<h2>Image Quality Parameters</h2>
+<table class="tbl">
+  <thead><tr><th>Parameter</th><th>Definition</th><th>Affected By</th><th>FSE Relevance</th></tr></thead>
+  <tbody>
+    <tr><td>Spatial Resolution</td><td>Ability to distinguish fine detail</td><td>Focal spot, kernel, detector pitch</td><td>Bar pattern phantom test</td></tr>
+    <tr><td>Contrast Resolution</td><td>Distinguish similar-density tissues</td><td>Dose, noise, slice thickness</td><td>Low-contrast phantom test</td></tr>
+    <tr><td>Image Noise</td><td>Random HU variation</td><td>mAs, algorithm, slice thickness</td><td>Spikes = detector/DAS issue</td></tr>
+    <tr><td>HU Accuracy</td><td>Correct CT number per tissue</td><td>Calibration, beam hardening</td><td>Water phantom: 0 ± 5 HU spec</td></tr>
+    <tr><td>Slice Thickness</td><td>Z-axis resolution</td><td>Collimation, recon settings</td><td>Z-axis phantom at PM</td></tr>
+  </tbody>
+</table>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Move to Troubleshooting</p></div><div class="done-xp">+150 XP</div></div>
+</div>
+
+<!-- TROUBLESHOOTING -->
+<div class="page" id="page-trouble">
+<div class="pg-title">🔧 Troubleshooting & Error Codes</div>
+<div class="pg-sub">Systematic fault diagnosis — from symptom to root cause to resolution. Diagnostic workflow, error categories, and action plans.</div>
+<h2>Diagnostic Workflow</h2>
+<div class="steps">
+  <div class="step"><div class="step-line"><div class="step-num">1</div><div class="step-con"></div></div><div class="step-body"><h4>Document the Symptom</h4><p>Exact error code, when it occurs (startup/scan/idle), frequency, reproducibility. Check MDE alerts and remote service logs before arriving on site.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">2</div><div class="step-con"></div></div><div class="step-body"><h4>Isolate the Subsystem</h4><p>Does it occur in all scan modes or specific protocols? Correlates with tube heat, room temperature, scan load? Use service mode tests to isolate.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">3</div><div class="step-con"></div></div><div class="step-body"><h4>Review Service Logs</h4><p>Event log in service mode — look for pattern: recurring code, time-of-day correlation, count thresholds (arc count, error count).</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">4</div><div class="step-con"></div></div><div class="step-body"><h4>Run Diagnostic Tests</h4><p>Use ServIT for the specific error code. Run specified tests — don't skip steps. Confirm root cause before ordering parts.</p></div></div>
+  <div class="step"><div class="step-line"><div class="step-num">5</div><div class="step-con"></div></div><div class="step-body"><h4>Escalate if Needed</h4><p>If inconclusive → open T3 Remote Support ticket with full log package. T3 can remotely access the system and confirm diagnosis.</p></div></div>
+</div>
+<h2>Error Categories & Actions</h2>
+<div id="fault-list"></div>
+<h2>Key Service Portals</h2>
+<table class="tbl">
+  <thead><tr><th>Portal</th><th>Purpose</th><th>When to Use</th></tr></thead>
+  <tbody>
+    <tr><td>ServIT</td><td>Service manuals, schematics, troubleshooting procedures</td><td>Every fault — look up error code first</td></tr>
+    <tr><td>iCenter / ISSA</td><td>Work orders, part ordering, depot tracking</td><td>Creating WOs, ordering parts</td></tr>
+    <tr><td>MDE Dashboard</td><td>Remote monitoring alerts</td><td>Check before arriving on site</td></tr>
+    <tr><td>T3 Remote Support</td><td>Technical escalation</td><td>After exhausting local diagnostics</td></tr>
+    <tr><td>Service Platform</td><td>PM scheduling, asset history</td><td>PM planning and review</td></tr>
+  </tbody>
+</table>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Continue to PM Checklists</p></div><div class="done-xp">+150 XP</div></div>
+</div>
+
+<!-- PM -->
+<div class="page" id="page-pm">
+<div class="pg-title">📋 PM Checklists</div>
+<div class="pg-sub">Interactive preventive maintenance checklists — use on-site. Tick items off as you go. Each item earns +5 XP.</div>
+<div class="pm-sum" id="pm-sum"></div>
+<div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+  <button class="btn" onclick="showPM('q')">Quarterly PM</button>
+  <button class="btn" onclick="showPM('a')">Annual PM</button>
+  <button class="btn" style="background:var(--red-s);border-color:rgba(239,68,68,0.3);color:var(--red);" onclick="resetPM()">Reset All</button>
+</div>
+<div id="pm-content"></div>
+</div>
+
+<!-- ORDERING -->
+<div class="page" id="page-ordering">
+<div class="pg-title">📦 Parts & Ordering</div>
+<div class="pg-sub">Complete workflow from fault identification to part delivery. Priority classification, DOA process, and portal guide.</div>
+<h2>Standard Ordering Flow</h2>
+<div class="flow-steps">
+  <div class="flow-step"><div class="f-num">01</div><h4>Fault ID</h4><p>Document error code, symptom, affected system from logs.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">02</div><h4>ServIT Lookup</h4><p>Find troubleshooting procedure. Confirm root cause before ordering.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">03</div><h4>Find Part #</h4><p>Use Part Search in iCenter. Match to system serial number.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">04</div><h4>Create WO</h4><p>Log in ISSA/iCenter. Attach evidence. Set P1/P2/P3 priority.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">05</div><h4>Dispatch</h4><p>Parts ship from regional depot. Track in iCenter logistics.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">06</div><h4>Install & Verify</h4><p>Install per Service Manual. Run post-install tests. Update WO.</p></div>
+  <div class="f-arr">→</div>
+  <div class="flow-step"><div class="f-num">07</div><h4>DOA Return</h4><p>Print RMA from iCenter. Ship defective part within window.</p></div>
+</div>
+<h2>Priority Classification</h2>
+<div class="card-grid">
+  <div class="card" style="border-color:rgba(239,68,68,0.3);background:var(--red-s);"><div style="font-size:0.62rem;font-weight:700;color:var(--red);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem;">P1 — CRITICAL / SYSTEM DOWN</div><h3 style="color:#fff;">Emergency</h3><p>System completely non-functional. Same-day or next-day delivery. Examples: Tube failure, HVG failure, main rotation motor. Contact GE Remote Support immediately.</p></div>
+  <div class="card" style="border-color:rgba(245,158,11,0.3);background:var(--amber-s);"><div style="font-size:0.62rem;font-weight:700;color:var(--amber);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem;">P2 — URGENT / DEGRADED</div><h3 style="color:#fff;">Urgent</h3><p>System running with reduced capability or artifacts. 1–3 day delivery. Examples: DAS board failure (ring artifact), single cooling loop issue, table errors.</p></div>
+  <div class="card" style="border-color:rgba(16,185,129,0.3);background:var(--green-s);"><div style="font-size:0.62rem;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem;">P3 — ROUTINE / PM</div><h3 style="color:#fff;">Planned</h3><p>Non-urgent parts for scheduled maintenance. 3–7 day delivery. Examples: Slip ring brushes, filters, belts, calibration phantoms.</p></div>
+</div>
+<h2>Part Number Best Practices</h2>
+<div class="box box-b"><div class="bl">💡 Pro Tips</div><ul>
+  <li>Always use the <strong>system serial number</strong> (gantry nameplate) when searching — parts vary between generations</li>
+  <li>Check <strong>BOM (Bill of Materials)</strong> in ServIT for the exact configuration of that specific unit</li>
+  <li>Parts have <strong>supersession chains</strong> — current shipping part # may differ from legacy #. ServIT shows the active part</li>
+  <li>Tube assemblies require matching <strong>kV rating and focal spot</strong> to the generator — never substitute without verification</li>
+  <li>For detector modules, <strong>row position matters</strong> — order the specific row/channel, not a generic board</li>
+</ul></div>
+<h2>DOA Return Process</h2>
+<div class="box box-r"><div class="bl">⚠ Critical — Never Skip</div><p>Failure to return defective parts within the required window (<strong>typically 10–30 days</strong>, region-dependent) results in a charge-back to the service contract.</p><ul style="margin-top:0.5rem;">
+  <li>Package defective part in same packaging as the new part received</li>
+  <li>Print and attach RMA label generated from iCenter</li>
+  <li>Ship via GEHC's designated carrier — not personal accounts</li>
+  <li>Log the RMA number in the Work Order before closing</li>
+</ul></div>
+<div class="done-banner"><div class="di">✅</div><div><h4>Chapter Complete!</h4><p>Take the Master Quiz to test all your knowledge</p></div><div class="done-xp">+150 XP</div></div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="page-quiz">
+<div class="pg-title">🎯 Master Knowledge Quiz</div>
+<div class="pg-sub">20 questions across all CT topics. Each correct answer earns +50 XP. Take it multiple times to improve your score.</div>
+<div id="quiz-con"></div>
+</div>
+
+
+</main>
+</div>
+<script>
+// ═══════════════ STATE ═══════════════
+let xp=0,qDone=0;
+const LEVELS=[{n:'Trainee',x:200},{n:'Junior FSE',x:500},{n:'FSE',x:1000},{n:'Senior FSE',x:2000},{n:'Lead FSE',x:9999}];
+function getLv(){for(let i=0;i<LEVELS.length;i++)if(xp<LEVELS[i].x)return i;return LEVELS.length-1;}
+function addXP(a){xp+=a;updXP();}
+function updXP(){
+  const li=getLv(),lv=LEVELS[li],prev=li>0?LEVELS[li-1].x:0;
+  const pct=Math.min(100,((xp-prev)/(lv.x-prev))*100);
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-lbl').textContent=xp+' XP';
+  document.getElementById('lv-name').textContent='Level '+(li+1)+' — '+lv.n;
+  document.getElementById('tb-xp').textContent='⚡ '+xp+' XP';
+  document.getElementById('sb-lv').textContent=lv.n;
+  document.getElementById('sb-nx').textContent=(lv.x-xp)+' XP to next level';
+  document.getElementById('d-xp').textContent=xp;
+  document.getElementById('d-qc').textContent=qDone;
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+const pgTitles={home:'Dashboard',physics:'CT Physics',gantry:'Gantry Components',models:'CT Models',artifacts:'Image Artifacts',trouble:'Troubleshooting',pm:'PM Checklists',ordering:'Parts & Ordering',quiz:'Master Quiz'};
+function goPage(el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  goPageById(el.dataset.page);
+}
+function goPageById(p){
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  const pg=document.getElementById('page-'+p);
+  if(pg)pg.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.dataset.page===p)n.classList.add('active');});
+  document.getElementById('tb-title').textContent=pgTitles[p]||p;
+  window.scrollTo(0,0);
+  closeSidebar();
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.body.classList.toggle('sb-open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.body.classList.remove('sb-open');
+}
+
+// ═══════════════ HU DEMO ═══════════════
+const TISS=[
+  {n:'Air',hu:-1000,c:'#1e3a5f'},{n:'Lung',hu:-750,c:'#1e4a8f'},{n:'Fat',hu:-80,c:'#d97706'},
+  {n:'Water',hu:0,c:'#22d3ee'},{n:'CSF',hu:15,c:'#67e8f9'},{n:'Blood',hu:55,c:'#ef4444'},
+  {n:'Soft Tissue',hu:45,c:'#f87171'},{n:'Liver',hu:65,c:'#92400e'},
+  {n:'Cancellous Bone',hu:350,c:'#d4c5b0'},{n:'Cortical Bone',hu:700,c:'#f5f0eb'},
+];
+function updHU(v){
+  const n=parseInt(v),cl=TISS.reduce((a,b)=>Math.abs(b.hu-n)<Math.abs(a.hu-n)?b:a);
+  document.getElementById('hu-num').textContent=(n>0?'+':'')+n;
+  document.getElementById('hu-tissue').textContent='≈ '+cl.n;
+  const pct=Math.max(3,((n+1000)/2000)*100);
+  const bar=document.getElementById('hu-bar');
+  bar.style.width=pct+'%';bar.style.background=cl.c;bar.style.boxShadow='0 0 8px '+cl.c+'80';
+}
+function initTCh(){
+  const el=document.getElementById('tch-chips');if(!el)return;
+  el.innerHTML=TISS.map(t=>`<span class="tch" style="color:${t.c};border-color:${t.c}60;background:${t.c}18;" onclick="document.getElementById('hu-sl').value=${t.hu};updHU(${t.hu})">${t.n} (${t.hu>0?'+':''}${t.hu})</span>`).join('');
+}
+
+// ═══════════════ COMPONENT EXPLORER ═══════════════
+const COMPS=[
+  {id:'tube',name:'X-Ray Tube',icon:'⚡',sub:'Performix / Quantix 160',
+   beg:{txt:'Think of it like a powerful flashlight that shoots X-rays instead of visible light. Two parts: cathode (negative) releases electrons; anode (positive) is where electrons crash and X-rays are produced. The entire tube is a vacuum so nothing interferes.',ana:'🔦 Like a gun that shoots invisible photons (X-rays) through the patient — the dose is the "bullets" and kV is the speed.'},
+   mid:{pts:['Cathode filament heated by current → thermionic emission of electrons','High voltage (80–140kV) accelerates electrons from cathode to anode at high speed','Electrons hit tungsten target → ~1% X-rays, ~99% heat (Bremsstrahlung + Characteristic radiation)','Anode disk rotates at 3,600–10,000 RPM to spread heat across larger area','X-rays exit through beryllium window, shaped by collimators'],sps:[['Param','BrightSpeed/Optima','Revolution'],['Tube Type','Performix','Quantix 160'],['kV Range','80–140 kV','70–140 kV'],['Max mA','500 mA','800 mA'],['Heat Cap','7 MHU','10 MHU'],['Focal Spots','0.7/1.2mm','0.6/1.0mm']]},
+   adv:{fs:[{n:'Filament Burnout',s:'kV/mA errors, scan abort, tube ready fails',c:'Excessive mA over time, thermal fatigue of tungsten filament',a:'Check arc count in service mode. Verify mA calibration. Tube replacement required if filament checks fail.'},
+     {n:'Bearing Wear',s:'Grinding noise at rotation, vibration artifacts in images',c:'Lubricant breakdown, high cumulative scan volume causing metal fatigue',a:'Listen for bearing noise at low kW exposures. Bearing failure = full tube assembly replacement. Document noise pattern in WO.'},
+     {n:'Arcing Events',s:'HV fault codes, repeated scan aborts, arc events in service log',c:'Vacuum compromise, anode surface pitting from overuse or conditioning needed',a:'Review arc count log. >5,000 arcs = evaluate for replacement. Try tube conditioning procedure first per ServIT.'},
+     {n:'Oil Leak',s:'Visible oil around housing, burning smell, thermal protection trips',c:'Seal degradation, overpressure in cooling circuit from tube overheating',a:'Inspect tube housing seals at every PM. Oil contamination affects cooling. Immediate replacement required.'}]}},
+  {id:'det',name:'Detector Array',icon:'📡',sub:'HiLight (BGO) / Gemstone Clarity',
+   beg:{txt:'The detector is the "catcher" that receives X-rays after passing through the patient. Different tissues absorb different amounts — bone absorbs a lot, air almost none. The detector measures exactly how many X-rays arrived at each point, from every angle.',ana:'📸 Like a digital camera sensor, but for X-rays instead of visible light — millions of measurements per second.'},
+   mid:{pts:['Scintillator crystals convert X-ray photons → visible light flashes (BGO or Gemstone garnet)','Photodiodes under each crystal convert light → analog electrical signal','DAS boards digitize thousands of readings per second from all channels simultaneously','More detector rows = more slices per rotation = wider anatomy per scan','Afterglow time is critical — slower afterglow = more crosstalk between adjacent views'],sps:[['Param','HiLight (BGO)','Gemstone Clarity'],['Material','Bismuth Germanate','Garnet (GSAG)'],['Afterglow','Slower decay','3× faster decay'],['Used In','BrightSpeed, Optima','Revolution series'],['Max Rows','64 rows','256 rows'],['Spectral CT','No','Yes (Apex/Frontier)']]},
+   adv:{fs:[{n:'Failed DAS Channel',s:'Ring artifact — concentric ring centered on bore, consistent on all images',c:'Failed photodiode or DAS amplifier on one specific detector channel',a:'Identify ring radius → calculate detector row/channel → replace DAS module → run full detector calibration.'},
+     {n:'Scintillator Damage',s:'Band-shaped streaks through image, noise pattern in specific region',c:'Crystal cracking from physical damage (patient incident or gantry impact)',a:'Air calibration shows abnormal channel response. Visually inspect detector face. Replace damaged detector module.'},
+     {n:'Temperature Drift',s:'Image quality degrades after extended scanning sessions',c:'Detector temperature changes affecting scintillator response uniformity',a:'Verify equipment room temperature. Allow detector to thermally stabilize before calibration. Run air cal after warm-up.'},
+     {n:'Calibration Mismatch',s:'Shading artifacts, HU values outside spec, rings after hardware work',c:'Missed calibration after hardware change, power event, or software update',a:'Run full sequence: Air Calibration → Water Calibration → verify with water phantom (0 ± 5 HU).'}]}},
+  {id:'hvg',name:'HV Generator',icon:'🔋',sub:'Inverter-based, Gantry-Mounted',
+   beg:{txt:'The HV Generator is the power supply of the CT. It converts normal facility electricity into extremely high voltage (up to 140,000 volts!) needed to accelerate electrons in the X-ray tube. Without it, no X-rays can be produced.',ana:'🔌 Like a transformer that boosts your home power to lightning-bolt voltage — but precisely regulated to 0.1% accuracy.'},
+   mid:{pts:['Input: 3-phase AC (480V) from facility → converted to high-frequency DC inside gantry','Inverter stage enables compact design and millisecond kV switching response time','High-voltage transformer boosts to 40–140 kV regulated output','Feedback loop maintains exact kV/mA within ±1% accuracy throughout exposure','Mounted on rotating frame — eliminates long HV cables that could arc, flex-fail, or wear'],sps:[['Parameter','Value'],['Input Voltage','480V 3-phase AC'],['Output kV','70–140 kV (continuous)'],['kV Accuracy','±1%'],['Max Power','100 kW (Revolution)'],['Response Time','<1 ms kV switch'],['Mounting','Rotating gantry frame']]},
+   adv:{fs:[{n:'kV Regulation Fault',s:'HV regulation error codes, scan abort at start of every exposure',c:'Feedback circuit fault, inverter component failure, or calibration drift over time',a:'Check HVG diagnostic logs in service mode. Verify kV calibration. May require HVG board replacement or recalibration per ServIT.'},
+     {n:'HVG Arcing',s:'Repeated arc events, system shuts down mid-exposure, arc count climbing fast',c:'Insulation breakdown in HVG, or tube vacuum issue generating reflected arc events',a:'Distinguish tube vs HVG arcing: HVG arcing = present even on low loads. Tube arcing = worsens with scan load. Check arc location in error log.'},
+     {n:'IGBT Failure',s:'No HV output at all, blown protection fuse in HVG power section',c:'Power surge from facility, failed switching transistor in inverter stage',a:'Requires HVG module replacement. Check upstream power quality (voltage sags, surges) before replacement to prevent recurrence.'}]}},
+  {id:'sr',name:'Slip Ring',icon:'🔄',sub:'Power + High-Speed Data Transfer',
+   beg:{txt:'If the gantry spins continuously, how does it get power and send data without cables tangling up? The slip ring! It is a set of circular contacts that allow electricity and data to flow between the stationary frame and the rotating parts of the CT — enabling non-stop helical scanning.',ana:'💿 Like electrical contacts in a power drill that keep it running while the chuck spins freely in any direction.'},
+   mid:{pts:['Power slip ring: transfers 480V AC to rotating components (tube, HVG, fans, DAS)','Data slip ring: modern GE CT uses optical fiber rotary joint for high-bandwidth data transmission','Carbon brush contacts ride continuously on the rotating rings — predictable wear consumable item','Enables continuous rotation without cable twist-up — the critical enabler of helical scanning','Brush dust accumulation is a known maintenance issue requiring scheduled cleaning per PM protocol'],sps:[['Parameter','Details'],['Power Transfer','480V AC, high current'],['Data Transfer','Optical / high-speed contact'],['Brush Material','Carbon composite'],['PM Interval','Per manufacturer schedule'],['Failure Mode','Intermittent data errors / artifacts'],['Cleaning','Approved solvent + lint-free cloth only']]},
+   adv:{fs:[{n:'Brush Wear',s:'Intermittent scan artifacts, occasional data dropout error codes',c:'Normal wear from continuous rotation — high scan volume accelerates wear rate',a:'Inspect brush length at every PM. Measure contact force with gauge. Replace when at minimum spec — before failure, not after.'},
+     {n:'Carbon Dust Buildup',s:'Increased data noise, intermittent ring artifacts, occasional arcing sounds',c:'Brush wear debris accumulates on ring contact surfaces over time',a:'Clean ring surfaces with manufacturer-approved solvent and lint-free cloth. Vacuum carbon dust carefully — avoid spreading.'},
+     {n:'Ring Surface Wear',s:'Persistent data errors even after installing new brushes',c:'Long-term use causes pitting or grooving of the ring contact surface itself',a:'Ring surface needs reconditioning or full slip ring assembly replacement. Inspect surface profile with magnification.'}]}},
+  {id:'das',name:'DAS System',icon:'🧮',sub:'Data Acquisition System',
+   beg:{txt:'DAS stands for Data Acquisition System. After the detector picks up X-rays, the DAS translates those tiny electrical signals into digital numbers a computer can process. It is the translator between the detector hardware and the reconstruction software.',ana:'🔢 Like a very fast analog-to-digital converter — the same concept as your sound card digitizing audio, but sampling X-ray data at thousands of readings per second continuously.'},
+   mid:{pts:['Mounted directly on rotating frame, adjacent to each detector row segment','Amplifies tiny photodiode signals before conversion to prevent noise pickup','ADC (analog-to-digital converter) digitizes at thousands of samples per second (views per rotation)','Multiplexed data transmitted via slip ring optical channel to reconstruction computer','Each DAS board handles a fixed number of channels — failure = loss of those specific channels only'],sps:[['Parameter','Value'],['Sampling Rate','~7,000 views/rotation'],['Location','Rotating gantry frame'],['Architecture','Per-row modular boards'],['Failure Signature','Ring artifact at specific radius'],['Post-Replace Req.','Full detector calibration'],['Power Source','Via slip ring']]},
+   adv:{fs:[{n:'DAS Board Failure',s:'Ring artifact at fixed radius, consistent across all scans and phantoms',c:'Component failure on specific DAS board affecting its detector channels',a:'Calculate ring radius → identify detector row → replace DAS module → run full detector calibration sequence.'},
+     {n:'Intermittent DAS',s:'Ring artifact that appears and disappears, worsens after extended scanning',c:'Loose connector or thermal cycling causing intermittent contact failure',a:'Reseat all DAS connectors. Check if artifact worsens after extended scan (thermal expansion). Replace board if reseating fails.'},
+     {n:'ADC Gain Drift',s:'Gradual HU value shift over time, subtle shading artifacts across image',c:'Temperature drift in ADC reference circuits after extended scan sessions',a:'Air calibration typically corrects. If persistent after calibration → DAS board replacement. Check equipment room temp stability.'}]}},
+  {id:'recon',name:'Recon System',icon:'🖥️',sub:'FBP → ASiR → AI Recon DL → TrueFidelity',
+   beg:{txt:'The reconstruction system is the brain of the CT. It takes measurements from thousands of angles and uses advanced mathematics to calculate what must be inside the patient. Like taking photos of a sculpture from 1,000 different angles and a computer figures out the 3D shape from those photos alone.',ana:'🧩 Like solving a massive 3D jigsaw puzzle using pure math — completed in less than one second per slice.'},
+   mid:{pts:['FBP (Filtered Back Projection): Traditional, very fast. Projects each view back across image space. Noise increases at low dose. All platforms.','ASiR: Iterative algorithm — reduces noise ~40%. Compares estimated vs actual data iteratively. BrightSpeed and newer.','ASiR-V: Second-gen iterative — models both system and statistical noise. Better quality/dose trade-off. Optima and newer.','AIR Recon DL: Deep learning neural network, GPU-accelerated. Reduces noise without resolution loss. Revolution EVO+.','TrueFidelity: Highest-end DL recon. Clinical-grade neural network trained on GE CT data. Revolution Apex hardware only.'],sps:[['Algorithm','Platform','Dose Reduction','Notes'],['FBP','All systems','Baseline','Fast, standard reference'],['ASiR','BrightSpeed+','~40%','First-gen iterative'],['ASiR-V','Optima+','~50%','Better quality/dose trade-off'],['AIR Recon DL','EVO, Discovery','~60%','GPU-based deep learning'],['TrueFidelity','Rev. Apex','~82%','Best-in-class DL recon']]},
+   adv:{fs:[{n:'Slow Reconstruction',s:'Long image processing times, technologist reports images taking minutes',c:'RC CPU/GPU overload, memory leak, hung reconstruction process, insufficient equipment room cooling',a:'Check RC performance in service mode. Restart reconstruction service. Verify GPU health (DL systems). Check room temperature.'},
+     {n:'Reconstruction Error',s:'Error message during scan, images not completing, partial series generated',c:'Data corruption in DAS-to-RC transfer, RC software fault, or insufficient disk space',a:'Check data pathway integrity. Clear reconstruction queue. Verify disk space. RC software service restart.'},
+     {n:'Algorithm Artifact',s:'Systematic streak or noise patterns not explained by any hardware fault',c:'Mismatch between calibration data and current hardware state after repairs or updates',a:'Re-run full air + water calibration. Ensure recon engine uses updated calibration files. Verify with phantom scan.'}]}}
+];
+
+let cIdx=0,cLv=0;
+function initGantry(){
+  const tabs=document.getElementById('comp-tabs');if(!tabs)return;
+  tabs.innerHTML=COMPS.map((c,i)=>`<button class="comp-tab${i===0?' active':''}" onclick="setComp(${i})">${c.icon} ${c.name}</button>`).join('');
+  renderComp();
+}
+function setComp(i){cIdx=i;document.querySelectorAll('.comp-tab').forEach((t,j)=>t.classList.toggle('active',i===j));renderComp();}
+function setLv(l){
+  cLv=l;
+  document.getElementById('lt0').className='lv-tab'+(l===0?' lv-g':'');
+  document.getElementById('lt1').className='lv-tab'+(l===1?' lv-a':'');
+  document.getElementById('lt2').className='lv-tab'+(l===2?' lv-r':'');
+  renderComp();
+}
+function renderComp(){
+  const c=COMPS[cIdx],p=document.getElementById('comp-panel');if(!p)return;
+  const col=cLv===0?'var(--green)':cLv===1?'var(--amber)':'var(--red)';
+  let h=`<div style="margin-bottom:1rem;"><div style="font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:3px;">${c.sub}</div><h4 style="color:${col};font-size:1rem;font-weight:800;">${c.icon} ${c.name}</h4></div>`;
+  if(cLv===0){
+    h+=`<p style="color:var(--text);font-size:0.88rem;line-height:1.9;">${c.beg.txt}</p>
+    <div style="margin-top:0.75rem;padding:0.75rem 1rem;background:var(--green-s);border:1px solid rgba(16,185,129,0.2);border-radius:8px;font-size:0.85rem;color:var(--green);">${c.beg.ana}</div>`;
+  } else if(cLv===1){
+    h+=`<ul style="margin-bottom:1rem;">${c.mid.pts.map(pt=>`<li style="margin-bottom:0.4rem;font-size:0.83rem;">${pt}</li>`).join('')}</ul>`;
+    if(c.mid.sps){h+=`<div style="overflow-x:auto;"><table class="tbl"><thead><tr>${c.mid.sps[0].map(hd=>`<th>${hd}</th>`).join('')}</tr></thead><tbody>${c.mid.sps.slice(1).map(r=>`<tr>${r.map(cell=>`<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+  } else {
+    h+=`<div style="font-size:0.62rem;font-weight:700;color:var(--red);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:1rem;">FAILURE MODE ANALYSIS</div>`;
+    c.adv.fs.forEach(f=>{h+=`<div class="fc"><div class="fn">⚠ ${f.n}</div><div class="fg"><span class="fk">Symptom:</span><span class="fv">${f.s}</span><span class="fk">Cause:</span><span class="fv">${f.c}</span><span class="fk" style="color:var(--cyan);">Action:</span><span class="fv fa">${f.a}</span></div></div>`;});
+  }
+  p.innerHTML=h;
+}
+// ═══════════════ ARTIFACTS ═══════════════
+const ARTS=[
+  {n:'Ring Artifact',c:'Failed detector channel or DAS board',sev:'high',
+   look:'Concentric ring(s) centered on the bore. Ring radius directly maps to the position of the faulty detector element.',
+   why:'The malfunctioning channel consistently outputs an incorrect signal at every rotation angle. This consistent deviation at a fixed radius creates a perfect ring in the reconstructed image.',
+   act:'1) Identify ring radius in pixels. 2) Calculate which detector row/channel corresponds to that radius using detector geometry. 3) Run detector diagnostics — confirm faulty channel. 4) Replace DAS module for that row. 5) Run full detector calibration (Air + Water). 6) Verify with water phantom.',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0f1729" rx="6"/><circle cx="40" cy="40" r="32" fill="#1a2540"/><circle cx="40" cy="40" r="20" fill="#0f1729"/><circle cx="40" cy="40" r="32" fill="none" stroke="#ef4444" stroke-width="2" opacity="0.9"/><circle cx="40" cy="40" r="20" fill="none" stroke="#ef4444" stroke-width="0.8" opacity="0.4"/><circle cx="40" cy="40" r="8" fill="#1a2540"/></svg>`},
+  {n:'Streak Artifact',c:'Metal implants, beam hardening, or patient motion',sev:'medium',
+   look:'Bright or dark streaks emanating from dense structures (metal, bone). Can also appear from rapid patient movement.',
+   why:'Dense metal absorbs nearly all X-rays at angles passing through it — causing massive attenuation inconsistencies that appear as streaks during reconstruction. Motion shifts object position between views causing similar patterns.',
+   act:'Metal streaks: Use MAR (Metal Artifact Reduction) algorithm if available. Motion streaks: Improve patient immobilization, use faster protocols, breath-hold coaching. Beam hardening: Verify BHC correction is applied in reconstruction.',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0f1729" rx="6"/><ellipse cx="40" cy="40" rx="28" ry="20" fill="#1a2540"/><line x1="5" y1="40" x2="75" y2="40" stroke="#f59e0b" stroke-width="1.2" opacity="0.8"/><line x1="12" y1="28" x2="68" y2="52" stroke="#f59e0b" stroke-width="0.7" opacity="0.5"/><line x1="12" y1="52" x2="68" y2="28" stroke="#f59e0b" stroke-width="0.7" opacity="0.5"/><circle cx="40" cy="40" r="5" fill="#4f8ef7" opacity="0.9"/></svg>`},
+  {n:'Beam Hardening',c:'Polychromatic X-ray beam through dense tissue',sev:'medium',
+   look:'Dark bands between dense structures (classic: dark band between petrous bones in head CT). Can also appear as "cupping" in phantom images.',
+   why:'Polychromatic beam contains low and high energy photons. Dense tissue preferentially absorbs low-energy photons — the beam "hardens". Reconstruction assumes monochromatic beam, causing dark band artifacts.',
+   act:'Verify beam hardening correction (BHC) algorithm is enabled and calibrated for the protocol. Re-run water calibration. For head protocols ensure correct head BHC table is applied. Check patient positioning — asymmetry worsens BH artifacts.',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0f1729" rx="6"/><ellipse cx="40" cy="40" rx="30" ry="22" fill="#22d3ee" opacity="0.15"/><ellipse cx="40" cy="40" rx="30" ry="22" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.5"/><rect x="12" y="35" width="56" height="10" fill="#0a0f1e" opacity="0.75"/></svg>`},
+  {n:'Motion Artifact',c:'Patient movement during scan acquisition',sev:'low',
+   look:'Blurring, streaking, or ghosting caused by patient movement. Can mimic pathology or obscure real findings.',
+   why:'Any movement during data acquisition causes inconsistency between projection views acquired at different time points. The mismatch creates blurring and streak artifacts in reconstruction.',
+   act:'Clinical: Improve patient immobilization, breath-hold coaching, shorter scan time protocols, consider sedation. Technical: Use faster rotation speed. Verify table motion is smooth (not a mechanical/table fault causing micro-vibrations).',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0f1729" rx="6"/><ellipse cx="36" cy="40" rx="20" ry="26" fill="#1a2540" opacity="0.8"/><ellipse cx="43" cy="40" rx="20" ry="26" fill="#1a2540" opacity="0.5"/><ellipse cx="50" cy="40" rx="20" ry="26" fill="#1a2540" opacity="0.25"/></svg>`},
+  {n:'Partial Volume',c:'Thick slice averaging different tissue types',sev:'low',
+   look:'Artificial HU value when a voxel contains two different tissue types, averaged into a "mixed" value that represents neither accurately.',
+   why:'If a slice is thick enough to include both bone and soft tissue at the same z-position, the voxel HU value is the average. Critical in small structure imaging and at tissue boundaries.',
+   act:'Use thinner slice reconstruction (retrospective from raw data if available). Select appropriate slice thickness for the clinical question. This is a physics limitation, not usually an equipment fault — educate technologists.',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0f1729" rx="6"/><rect x="12" y="18" width="56" height="18" fill="#d4c5b0" rx="3" opacity="0.8"/><rect x="12" y="44" width="56" height="18" fill="#f87171" rx="3" opacity="0.6"/><rect x="12" y="33" width="56" height="14" fill="#a78bfa" rx="2" opacity="0.75"/><text x="40" y="43" text-anchor="middle" fill="#fff" font-size="6" font-family="JetBrains Mono" font-weight="700">MIXED HU</text></svg>`},
+  {n:'Shading Artifact',c:'Detector uniformity or calibration issue',sev:'medium',
+   look:'Gradual darkening or brightening across the image — not related to anatomy. May appear as asymmetric brightness or density variation.',
+   why:'Calibration data mismatch between detector regions. Some channels respond differently to the same X-ray flux — causing systematic HU errors that manifest as shading across the image.',
+   act:'Run air calibration (at correct operating temperature — do not calibrate cold). Run water calibration and verify flat uniformity across phantom. If persistent → suspect specific DAS channel drift or detector uniformity issue requiring hardware inspection.',
+   svg:`<svg width="75" height="75" viewBox="0 0 80 80"><defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0a0f1e"/><stop offset="100%" stop-color="#4f8ef7" stop-opacity="0.45"/></linearGradient></defs><rect width="80" height="80" fill="#0f1729" rx="6"/><ellipse cx="40" cy="40" rx="30" ry="26" fill="url(#sg)"/></svg>`},
+];
+let openArt=-1;
+function initArts(){
+  const g=document.getElementById('art-grid');if(!g)return;
+  g.innerHTML=ARTS.map((a,i)=>`<div class="art-card${openArt===i?' open':''}" onclick="toggleArt(${i})">
+    <div class="art-svg">${a.svg}</div>
+    <div class="art-name">${a.n}</div>
+    <div class="art-cause">${a.c}</div>
+    <div style="margin-top:0.5rem;font-size:0.6rem;font-weight:700;color:${a.sev==='high'?'var(--red)':a.sev==='medium'?'var(--amber)':'var(--green)'};font-family:'JetBrains Mono',monospace;">${a.sev==='high'?'⚠ HIGH IMPACT':a.sev==='medium'?'MEDIUM IMPACT':'LOW IMPACT'}</div>
+  </div>`).join('');
+}
+function toggleArt(i){
+  const d=document.getElementById('art-det');
+  if(openArt===i){openArt=-1;d.classList.remove('show');d.innerHTML='';}
+  else{
+    openArt=i;const a=ARTS[i];
+    d.innerHTML=`<h3 style="color:var(--cyan);margin-top:0;">${a.n}</h3>
+      <div class="box box-b"><div class="bl">What It Looks Like</div><p>${a.look}</p></div>
+      <div class="box box-p"><div class="bl">Why It Happens (Physics)</div><p>${a.why}</p></div>
+      <div class="box box-g"><div class="bl">FSE Action Plan</div><p>${a.act}</p></div>`;
+    d.classList.add('show');
+  }
+  initArts();
+}
+
+// ═══════════════ TROUBLESHOOTING ═══════════════
+const FAULTS=[
+  {cat:'HV / X-Ray Tube Faults',col:'var(--red)',items:[
+    {code:'HV-001',s:'High voltage not reaching set point',c:'HVG regulation failure or tube arcing',a:'Check HVG diagnostic. Verify tube arc count. Run tube conditioning if arcs below threshold.'},
+    {code:'HV-002',s:'Repeated arc events during scan exposure',c:'Tube vacuum compromise or HVG IGBT fault',a:'Distinguish tube vs HVG source. Check arc location in error log. Condition tube or replace component.'},
+    {code:'TUB-010',s:'Tube ready signal not achieved after timeout',c:'Anode not at speed, filament fault, or bearing failure',a:'Listen for bearing noise. Check filament current in service mode. Check anode speed sensor signal.'},
+  ]},
+  {cat:'Detector / DAS Faults',col:'var(--amber)',items:[
+    {code:'DAS-001',s:'Consistent ring artifact in all images',c:'Failed DAS channel or specific detector element',a:'Identify ring radius → locate channel → replace DAS module → full detector recalibration.'},
+    {code:'DET-005',s:'HU values drifting outside spec over session',c:'Detector calibration drift or room temperature instability',a:'Run air and water calibration at operating temperature. Verify room temp stability.'},
+    {code:'DAS-012',s:'Intermittent data dropout during scan',c:'Loose DAS connector or slip ring data channel issue',a:'Reseat all DAS connectors. Clean slip ring data contacts. Check for thermal correlation.'},
+  ]},
+  {cat:'Gantry / Rotation Faults',col:'var(--blue)',items:[
+    {code:'ROT-001',s:'Gantry fails to reach target speed',c:'Motor fault, encoder failure, or mechanical obstruction',a:'Check rotation motor drive. Verify encoder signal. Inspect gantry for obstruction or misalignment.'},
+    {code:'ROT-008',s:'Vibration or noise during rotation',c:'Bearing wear (gantry or tube), mechanical imbalance after repair',a:'Identify source: tube bearing (during X-ray) vs gantry bearing (all speeds). Document and replace.'},
+  ]},
+  {cat:'Cooling / Thermal Faults',col:'var(--cyan)',items:[
+    {code:'THM-001',s:'Tube thermal protection trip mid-scan',c:'Tube approaching MHU limit, or cooling system failure',a:'Check tube heat load in service mode. Inspect oil level and cooling circuit. Verify HEX not blocked.'},
+    {code:'THM-010',s:'Equipment room temperature alarm',c:'Room AC failure or chiller fault affecting all electronics',a:'Verify room AC operating. Check chiller status. Ensure rack ventilation not blocked. Reduce scan load.'},
+  ]},
+];
+function initTrouble(){
+  const el=document.getElementById('fault-list');if(!el)return;
+  el.innerHTML=FAULTS.map(cat=>`<div class="fault-cat">
+    <div class="fault-cat-title" style="color:${cat.col};">${cat.cat}</div>
+    ${cat.items.map(f=>`<div class="fc" style="margin-bottom:0.75rem;">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:${cat.col};background:${cat.col}18;border:1px solid ${cat.col}40;padding:2px 8px;border-radius:99px;">${f.code}</span>
+        <span class="fn" style="margin:0;font-size:0.82rem;">${f.s}</span>
+      </div>
+      <div class="fg"><span class="fk">Cause:</span><span class="fv">${f.c}</span><span class="fk" style="color:var(--cyan);">Action:</span><span class="fv fa">${f.a}</span></div>
+    </div>`).join('')}
+  </div>`).join('');
+}
+
+// ═══════════════ PM CHECKLIST ═══════════════
+const PMS={
+  q:{title:'Quarterly PM',sections:[
+    {t:'Safety & LOTO',items:[{t:'Review LOTO procedure with customer before starting work',p:'c'},{t:'Verify all safety interlocks are functional',p:'c'},{t:'Test each emergency stop button individually',p:'c'},{t:'Check radiation warning lights and door interlocks',p:'c'}]},
+    {t:'X-Ray Tube',items:[{t:'Check tube arc count and MHU in service mode — document values',p:'h'},{t:'Inspect tube housing for oil leaks or discoloration',p:'h'},{t:'Verify tube oil level in sight glass (if accessible)',p:'h'},{t:'Run tube conditioning procedure per ServIT',p:'m'},{t:'Record tube serial number and cumulative scan count in WO',p:'m'}]},
+    {t:'Cooling System',items:[{t:'Inspect heat exchanger (HEX) for debris and blockage',p:'h'},{t:'Check all cooling fans — verify rotation and airflow direction',p:'h'},{t:'Inspect coolant hoses for cracks, kinks, or leaks',p:'h'},{t:'Verify room AC and equipment room temperature within spec',p:'m'},{t:'Clean or replace air filters (gantry, equipment racks)',p:'m'}]},
+    {t:'Slip Ring',items:[{t:'Inspect brush contact length — replace if below minimum spec',p:'h'},{t:'Clean ring contact surfaces with approved solvent',p:'h'},{t:'Vacuum carbon dust from brush housing carefully',p:'h'},{t:'Measure brush contact force with appropriate gauge',p:'m'}]},
+    {t:'Detector Calibration',items:[{t:'Run full Air Calibration — system must be at operating temperature',p:'c'},{t:'Run Water Calibration — verify result is 0 ± 5 HU',p:'c'},{t:'Run noise test — verify within specification',p:'h'},{t:'Run spatial resolution test with appropriate phantom',p:'h'},{t:'Document all calibration results in service record and WO',p:'h'}]},
+    {t:'Patient Table',items:[{t:'Test full table travel range — longitudinal and lateral',p:'h'},{t:'Verify table position accuracy with direct measurement',p:'h'},{t:'Inspect table top for cracks, stains, or damage',p:'m'},{t:'Lubricate table rails per manufacturer specification',p:'m'},{t:'Verify emergency stop and collision sensors function',p:'c'}]},
+    {t:'Documentation',items:[{t:'Complete all service documentation in ISSA/iCenter',p:'c'},{t:'Update asset record with component states and counts',p:'h'},{t:'Leave PM report copy with customer site contact',p:'h'},{t:'Schedule next PM in Service Platform',p:'m'}]},
+  ]},
+  a:{title:'Annual PM',sections:[
+    {t:'All Quarterly Items',items:[{t:'Complete all quarterly PM checklist items first before annual items',p:'c'}]},
+    {t:'Full Mechanical Inspection',items:[{t:'Inspect all gantry bearings — measure play and listen for noise',p:'c'},{t:'Check rotation belt/drive system tension and wear',p:'h'},{t:'Inspect all gantry structural fasteners — torque check per spec',p:'h'},{t:'Full lubrication service per manufacturer annual schedule',p:'h'}]},
+    {t:'Electrical Deep Check',items:[{t:'Verify line voltage and power quality at PDU — document readings',p:'h'},{t:'Test all ground connections — measure continuity and resistance',p:'c'},{t:'Inspect HVG capacitors and power supply boards for signs of aging',p:'h'},{t:'Test all protection circuits — over-voltage, over-current, thermal',p:'c'}]},
+    {t:'Full Performance QA',items:[{t:'Complete ACR / site QA phantom protocol — document all results',p:'c'},{t:'Measure CTDIvol and verify against established site baseline',p:'c'},{t:'Test all kV settings — verify HU accuracy at each kV level',p:'h'},{t:'Verify dose display accuracy (CTDI on operator console)',p:'h'},{t:'Test all FOV sizes — check geometric accuracy',p:'h'},{t:'Full slice thickness verification at each available collimation setting',p:'h'}]},
+    {t:'Software & Systems',items:[{t:'Verify software version — check for pending approved updates',p:'h'},{t:'Test DICOM send and receive to PACS and verify image quality',p:'h'},{t:'Verify remote service (MDE) connectivity and alert forwarding',p:'h'},{t:'Check backup system and confirm disaster recovery procedure',p:'m'}]},
+  ]},
+};
+let pmCk={},pmMode='q';
+function initPM(){renderPMSum();showPM('q');}
+function showPM(m){
+  pmMode=m;const data=PMS[m];
+  const el=document.getElementById('pm-content');if(!el)return;
+  el.innerHTML=data.sections.map((s,si)=>`<div class="pm-sec">
+    <div class="pm-st">${s.t}</div>
+    <div class="pm-items">${s.items.map((it,ii)=>{
+      const k=m+'-'+si+'-'+ii,done=pmCk[k];
+      return `<div class="pm-item${done?' checked':''}" onclick="togPM('${k}')">
+        <div class="pm-ck">${done?'✓':''}</div>
+        <div class="pm-tx">${it.t}</div>
+        <div class="pm-pr ${it.p==='c'?'pc':it.p==='h'?'ph':'pm'}">${it.p==='c'?'CRITICAL':it.p==='h'?'HIGH':'MED'}</div>
+      </div>`;}).join('')}
+    </div>
+  </div>`).join('');
+  renderPMSum();
+}
+function renderPMSum(){
+  const sum=document.getElementById('pm-sum');if(!sum)return;
+  sum.innerHTML=['q','a'].map(m=>{
+    const data=PMS[m];let all=0,done=0;
+    data.sections.forEach((s,si)=>s.items.forEach((_,ii)=>{all++;if(pmCk[m+'-'+si+'-'+ii])done++;}));
+    return `<div class="pm-stat"><div class="pm-sv" style="color:${done===all?'var(--green)':done>0?'var(--amber)':'var(--text)'}">${done}/${all}</div><div class="pm-sl">${m==='q'?'Quarterly PM':'Annual PM'}</div></div>`;
+  }).join('');
+}
+function togPM(k){pmCk[k]=!pmCk[k];if(pmCk[k])addXP(5);showPM(pmMode);}
+function resetPM(){pmCk={};showPM(pmMode);}
+
+// ═══════════════ QUIZ ═══════════════
+const QS=[
+  {q:'What percentage of electron energy is actually converted to X-rays in the CT tube?',o:['~50%','~99%','~1%','~25%'],c:2,e:'Only ~1% of electron energy becomes X-rays. The remaining ~99% converts to heat — which is why the rotating anode, oil cooling circuit, and heat exchanger are all critical for sustained CT operation.'},
+  {q:'Why does the anode in a CT X-ray tube rotate at high speed?',o:['To increase X-ray output','To spread heat across a larger surface area','To change the focal spot size','To align with the detector array'],c:1,e:'The rotating anode spreads heat load across the full circumference of the tungsten target. Without rotation, the focal spot would exceed melting temperature within seconds of exposure.'},
+  {q:'What does the slip ring primarily enable in modern CT design?',o:['Higher kV output','Continuous helical (spiral) scanning without cable limits','Faster image reconstruction speed','Better detector sensitivity'],c:1,e:'Early CTs had to stop and reverse after each rotation because cables would wind up. The slip ring eliminates this, enabling continuous helical scanning and whole-body acquisitions in seconds.'},
+  {q:'A ring artifact consistent across all images most likely indicates a problem with:',o:['X-ray tube','HV Generator','A specific detector channel or DAS board','The reconstruction algorithm'],c:2,e:'Ring artifacts are the classic signature of a failing detector channel or DAS board. The ring radius in the image maps directly to the position of the faulty detector element.'},
+  {q:'Which tissue has the HIGHEST Hounsfield Unit (HU) value?',o:['Air','Fat','Soft tissue','Cortical bone'],c:3,e:'Scale: Air = -1000, Fat = -80 to -100, Water = 0, Soft tissue = +20 to +80, Cortical Bone = +400 to +1000 HU. Dense structures attenuate more X-rays.'},
+  {q:'ASiR stands for:',o:['Automatic Scan Image Rendering','Adaptive Statistical Iterative Reconstruction','Advanced System Integration Routine','Acquisition Speed Increase Rate'],c:1,e:'ASiR (Adaptive Statistical Iterative Reconstruction) reduces image noise up to 40-50% vs FBP, enabling lower dose scans without sacrificing diagnostic quality. Available on BrightSpeed and newer.'},
+  {q:'What is the primary function of the DAS in a CT system?',o:['Generate X-rays','Amplify and digitize detector signals for reconstruction','Control gantry rotation speed','Shape the X-ray beam with collimators'],c:1,e:'The DAS (Data Acquisition System) amplifies and digitizes tiny analog electrical signals from detector photodiodes, transmitting digital data to the reconstruction computer via the slip ring.'},
+  {q:'Which GE CT detector is used in the Revolution series?',o:['HiLight BGO','Gemstone Clarity','Scintipix','GadOx'],c:1,e:'The Gemstone Clarity detector (garnet scintillator) is used in the Revolution series. It features 3x faster afterglow decay than the HiLight (BGO) detector used in BrightSpeed and Optima, enabling higher quality at faster rotation speeds.'},
+  {q:'What is the Revolution CT maximum z-coverage per single rotation?',o:['40mm','80mm','160mm','320mm'],c:2,e:'The Revolution CT covers 160mm per rotation — enabling whole-organ (whole heart, whole brain) imaging in a single rotation, eliminating motion artifacts from multi-rotation acquisitions.'},
+  {q:'Carbon brush dust buildup on the slip ring most directly causes:',o:['Tube arcing events','Intermittent data errors and image artifacts','HU value drift over time','Gantry rotation speed reduction'],c:1,e:'Carbon dust from brush wear accumulates on ring contact surfaces, causing inconsistent electrical contact, intermittent data errors from the DAS, and ultimately artifacts in the final image.'},
+  {q:'Which safety procedure is MANDATORY before any work inside the gantry?',o:['Run air calibration','Apply LOTO (Lockout/Tagout)','Disconnect DICOM network','Clear the reconstruction queue'],c:1,e:'LOTO (Lockout/Tagout) is always mandatory before entering the gantry. The HV Generator can retain lethal voltage levels even after power-down. Never skip this step under any circumstances.'},
+  {q:'A water phantom scan should read within which HU range to pass QA?',o:['0 ± 50 HU','0 ± 5 HU','100 ± 10 HU','-1000 ± 20 HU'],c:1,e:'Water calibration spec is 0 ± 5 HU. Values outside this range indicate calibration drift, beam hardening issues, detector uniformity problems, or positioning errors — all requiring investigation.'},
+  {q:'TrueFidelity AI reconstruction is exclusive to which platform?',o:['BrightSpeed Elite','Optima CT580','Revolution EVO','Revolution Apex'],c:3,e:'TrueFidelity is GE\'s highest-end deep learning reconstruction, exclusive to the Revolution Apex. It requires specialized GPU hardware and delivers approximately 82% dose reduction vs FBP baseline.'},
+  {q:'The BrightSpeed maximum patient table weight capacity is:',o:['204 kg','227 kg','350 kg','500 kg'],c:0,e:'BrightSpeed maximum table capacity is 204 kg. The Revolution CT/Apex features a 500 kg bariatric-capable table — a major differentiator for facilities serving larger patient populations.'},
+  {q:'A DOA defective part return must typically be completed within:',o:['3 days','1 week','10–30 days (region dependent)','90 days'],c:2,e:'DOA return windows are typically 10–30 days depending on the region. Failure to return parts within this window results in a charge-back to the service contract. Always check your regional policy.'},
+  {q:'Which reconstruction algorithm provides the LOWEST dose reduction?',o:['FBP','ASiR','ASiR-V','TrueFidelity'],c:0,e:'FBP (Filtered Back Projection) is the traditional algorithm with no dose reduction — it is the baseline reference. All iterative (ASiR, ASiR-V) and AI (AIR DL, TrueFidelity) algorithms provide progressive improvement over FBP.'},
+  {q:'What causes beam hardening artifact in CT?',o:['Detector calibration drift','Preferential absorption of low-energy photons by dense tissue','Patient motion during scan','DAS board failure in specific channels'],c:1,e:'Dense tissue preferentially absorbs low-energy photons from the polychromatic beam. The beam "hardens" and appears less attenuated than the reconstruction algorithm expects, producing characteristic dark bands.'},
+  {q:'When should slip ring brushes be replaced?',o:['When they occasionally spark','When they reach minimum specified length','At every PM regardless of condition','Only when artifacts appear in images'],c:1,e:'Brushes should be replaced when they reach the manufacturer\'s minimum specified length — before failure occurs. Measure at every PM. Proactive replacement based on measurement prevents unplanned downtime.'},
+  {q:'Which portal is used to create work orders and order parts at GE Healthcare?',o:['ServIT','MDE Dashboard','iCenter / ISSA','T3 Remote Support'],c:2,e:'iCenter / ISSA is the GE Healthcare portal for work order management, part ordering, depot tracking, and RMA generation. ServIT is for service documentation, manuals, and troubleshooting procedures.'},
+  {q:'P1 priority parts are typically dispatched:',o:['Within 1 week','Within 3 business days','Same day or next day','Within 2 weeks'],c:2,e:'P1 (Critical / System Down) parts are dispatched same day or next day. Contact GE Remote Support immediately for P1 orders — the service contract typically includes maximum system downtime commitments.'},
+];
+let qIdx=0,qScore=0,qSet=[];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function initQuiz(){
+  qSet=shuffle([...QS]).slice(0,20);qIdx=0;qScore=0;
+  renderQ();
+}
+function renderQ(){
+  const el=document.getElementById('quiz-con');if(!el)return;
+  if(qIdx>=qSet.length){
+    const pct=Math.round((qScore/qSet.length)*100);
+    el.innerHTML=`<div class="qwrap"><div class="q-res">
+      <div class="emoji">${pct>=80?'🏆':pct>=60?'👍':'📚'}</div>
+      <h3>${pct>=80?'Excellent Work!':pct>=60?'Good Progress!':'Keep Studying!'}</h3>
+      <div class="sc">${qScore}/${qSet.length}</div>
+      <p style="margin:0.5rem 0 0;">${pct}% correct &nbsp;·&nbsp; +${qScore*50} XP earned</p>
+      <button class="btn btn-g" onclick="initQuiz()">🔄 Start New Quiz</button>
+    </div></div>`;return;
+  }
+  const q=qSet[qIdx];
+  el.innerHTML=`<div class="qwrap">
+    <div class="q-hdr"><span>🎯</span><span class="q-hl">Question ${qIdx+1} of ${qSet.length}</span><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text3);">Score: ${qScore}</span></div>
+    <div class="q-prog">${qSet.map((_,i)=>`<div class="q-seg${i<qIdx?' done':i===qIdx?' cur':''}"></div>`).join('')}</div>
+    <div class="q-q">${q.q}</div>
+    <div class="q-opts">${q.o.map((o,i)=>`<button class="q-opt" onclick="ansQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div id="qfb"></div>
+  </div>`;
+}
+function ansQ(i){
+  if(document.querySelectorAll('.q-opt[disabled]').length)return;
+  const q=qSet[qIdx];
+  document.querySelectorAll('.q-opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.c)b.classList.add('correct');
+    else if(j===i&&i!==q.c)b.classList.add('wrong');
+    else b.classList.add('faded');
+  });
+  const ok=i===q.c;
+  if(ok){qScore++;qDone++;addXP(50);}
+  document.getElementById('qfb').innerHTML=`<div class="q-fb ${ok?'c':'w'}"><strong>${ok?'✓ Correct!':'✗ Not quite.'}</strong>${q.e}</div>
+  <button class="btn" onclick="qIdx++;renderQ()">${qIdx<qSet.length-1?'Next Question →':'See Final Results'}</button>`;
+}
+
+
+
+
+// ═══════════════ INIT ═══════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  initTCh();initGantry();initArts();initTrouble();initPM();initQuiz();updXP();
+});
+</script>
+</body>
+</html>
